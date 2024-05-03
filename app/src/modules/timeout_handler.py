@@ -35,3 +35,14 @@ async def handle_timeout(message):
 
   await message.channel.send(f"{message.author.mention} mentioned 'HOTS'! {message.author.mention} has mentioned 'HOTS' {user_timeouts[user_id]} times. As a punishment for they are timedout for {timeout_duration} seconds. Feel free to laugh at {message.author.mention}.")
   await message.author.edit(timed_out_until=discord.utils.utcnow() + datetime.timedelta(seconds=timeout_duration))
+
+async def handle_clear_timeouts(user_id):
+  user_timeouts = get_user_timeouts()
+
+  user_id = str(user_id)
+
+  user_timeouts[user_id] = 0
+
+  # Update .json
+  update_user_timeouts(user_timeouts)
+  return True
