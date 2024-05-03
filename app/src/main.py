@@ -2,8 +2,8 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
-import re
 from modules.timeout_handler import handle_timeout
+from fuzzywuzzy import fuzz,process
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -21,13 +21,10 @@ async def on_message(message):
     if message.author == bot.user or message.author == 'blu8646':
         return
 
-    patterns = [
-        re.compile(r'h\W*o\W*t\W*s'),
-        re.compile(r'[o|0][^\w]*f[^\w]*[t|7][^\w]*h[^\w]*e[^\w]*[s|$][^\w]*t[^\w]*o[^\w]*r[^\w]*m')
-    ]
+    phrase_variations = ['heroes of the strom', 'hots']
 
-    for pattern in patterns:
-        if pattern.search(message.content.lower()):
+    for variation in phrase_variations:
+        if fuzz.partial_ratio(variation, message.content.lower()) >= 85:
             await handle_timeout(message)
             await bot.process_commands(message)
 

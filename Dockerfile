@@ -10,4 +10,4 @@ RUN apk add --no-cache git
 
 COPY /app .
 
-CMD ["echo", "Container Running!"] 
+CMD ["python", "src/main.py"]
